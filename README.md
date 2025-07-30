@@ -160,13 +160,12 @@ def get_api_key(key_name):
 Passe as variáveis ao executar o contêiner:
 
 Bash
-
 docker run -p 8501:8501 \
-'-e GEMINI_KEY="sua_chave_gemini" \
-'-e GCP_PROJECT_ID="seu_projeto_gcp" \
-'-e GCP_LOCATION="us-central1" \
-'-e GSEARCH_KEY="sua_chave_gsearch" \
-'-e GSEARCH_CX="seu_cx_gsearch" \
+- '-e GEMINI_KEY="sua_chave_gemini" \
+- '-e GCP_PROJECT_ID="seu_projeto_gcp" \
+- '-e GCP_LOCATION="us-central1" \
+- '-e GSEARCH_KEY="sua_chave_gsearch" \
+- '-e GSEARCH_CX="seu_cx_gsearch" \
 minha-plataforma-ia
 Substitua sua_chave_gemini, etc., pelas suas chaves reais.
 ==================================================
