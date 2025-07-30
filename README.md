@@ -61,44 +61,44 @@ Na raiz do seu projeto, crie um arquivo chamado Dockerfile (sem extensão) com o
 
 Dockerfile
 
-# Usa uma imagem base oficial do Python.
-# A versão '3.9-slim-buster' é uma boa escolha pois é leve.
+ Usa uma imagem base oficial do Python.
+ A versão '3.9-slim-buster' é uma boa escolha pois é leve.
 FROM python:3.9-slim-buster
 
-# Define o diretório de trabalho dentro do contêiner.
-# Todos os comandos subsequentes serão executados a partir deste diretório.
+ Define o diretório de trabalho dentro do contêiner.
+ Todos os comandos subsequentes serão executados a partir deste diretório.
 WORKDIR /app
 
-# Copia o arquivo requirements.txt para o diretório de trabalho no contêiner.
+ Copia o arquivo requirements.txt para o diretório de trabalho no contêiner.
 COPY requirements.txt .
 
-# Instala as dependências Python listadas no requirements.txt.
-# O '--no-cache-dir' e '--upgrade pip' são boas práticas para builds otimizados.
+ Instala as dependências Python listadas no requirements.txt.
+ O '--no-cache-dir' e '--upgrade pip' são boas práticas para builds otimizados.
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install -r requirements.txt
 
-# Copia todos os outros arquivos do diretório atual (no host) para o diretório de trabalho (/app no contêiner).
-# Isso inclui seu script Python principal, config.yaml, etc.
+ Copia todos os outros arquivos do diretório atual (no host) para o diretório de trabalho (/app no contêiner).
+ Isso inclui seu script Python principal, config.yaml, etc.
 COPY . .
 
-# Cria o diretório 'user_files' dentro do contêiner.
-# É importante notar que, por padrão, o sistema de arquivos do Docker é efêmero.
-# Para persistência real, você precisaria de volumes Docker ou armazenamento em nuvem.
+ Cria o diretório 'user_files' dentro do contêiner.
+ É importante notar que, por padrão, o sistema de arquivos do Docker é efêmero.
+ Para persistência real, você precisaria de volumes Docker ou armazenamento em nuvem.
 RUN mkdir -p /app/user_files
 
-# Expõe a porta que o Streamlit usa (padrão é 8501).
-# Isso informa ao Docker que o contêiner escuta nesta porta.
+ Expõe a porta que o Streamlit usa (padrão é 8501).
+ Isso informa ao Docker que o contêiner escuta nesta porta.
 EXPOSE 8501
 
-# Define um comando de healthcheck.
-# O Docker irá verificar se a aplicação está respondendo nesta URL.
+ Define um comando de healthcheck.
+ O Docker irá verificar se a aplicação está respondendo nesta URL.
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
-# Define o comando que será executado quando o contêiner for iniciado.
-# - 'streamlit run' executa sua aplicação.
-# - '--server.port=8501' garante que o Streamlit use a porta exposta.
-# - '--server.enableCORS=false' e '--server.enableXsrfProtection=false' são para facilitar o acesso em alguns ambientes.
-#   Para produção, você pode querer reavaliar essas configurações ou usar um proxy reverso.
+ Define o comando que será executado quando o contêiner for iniciado.
+ - 'streamlit run' executa sua aplicação.
+ - '--server.port=8501' garante que o Streamlit use a porta exposta.
+ - '--server.enableCORS=false' e '--server.enableXsrfProtection=false' são para facilitar o acesso em alguns ambientes.
+   Para produção, você pode querer reavaliar essas configurações ou usar um proxy reverso.
 ENTRYPOINT ["streamlit", "run", "central_de_ferramentas UX e Alth1.4.2.py", "--server.port=8501", "--server.enableCORS=false", "--server.enableXsrfProtection=false"]
 4. Construindo a Imagem Docker
 Navegue até a pasta sua_pasta_projeto no seu terminal e execute o seguinte comando:
@@ -142,16 +142,16 @@ import streamlit as st # Certifique-se de importar streamlit se ainda não o fez
 
 def get_api_key(key_name):
     """Busca a chave de API do perfil do usuário logado de forma segura, preferindo variáveis de ambiente."""
-    # Adaptação simples para nomes de variáveis de ambiente (ex: GEMINI_KEY, GCP_PROJECT_ID)
+     Adaptação simples para nomes de variáveis de ambiente (ex: GEMINI_KEY, GCP_PROJECT_ID)
     env_var_name = key_name.upper().replace('KEY', '_KEY').replace('ID', '_ID').replace('GSEARCH_CX', 'GSEARCH_CX')
     env_value = os.getenv(env_var_name)
     if env_value:
         return env_value
     try:
-        # Se não encontrada em env, tenta do config.yaml
-        # Certifique-se de que 'config' e 'username' estejam acessíveis aqui no contexto de sua aplicação
-        # (Este trecho assume que 'config' e 'username' estão definidos em seu script principal)
-        # return config['credentials']['usernames'][username]['api_keys'][key_name]
+         Se não encontrada em env, tenta do config.yaml
+         Certifique-se de que 'config' e 'username' estejam acessíveis aqui no contexto de sua aplicação
+         (Este trecho assume que 'config' e 'username' estão definidos em seu script principal)
+         return config['credentials']['usernames'][username]['api_keys'][key_name]
         st.warning(f"Chave de API '{key_name}' não encontrada como variável de ambiente '{env_var_name}'. Verifique o arquivo config.yaml ou configure a variável de ambiente.")
         return None # Ou levantar uma exceção, dependendo da sua estratégia de erro
     except (KeyError, TypeError):
