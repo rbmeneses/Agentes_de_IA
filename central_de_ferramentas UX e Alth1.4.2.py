@@ -21,11 +21,8 @@ from yaml.loader import SafeLoader
 import streamlit_authenticator as stauth
 from pathlib import Path
 
-# --- CONFIGURAÇÃO GERAL E DA PÁGINA ---
 st.set_page_config(layout="wide", page_title="Minha Plataforma de IA ")
 
-# --- 1. DESIGN E ESTILO (UX/UI) ---
-# O CSS foi mantido para preservar a identidade visual da aplicação.
 st.markdown("""
 <style>
     /* Gradiente na barra lateral */
@@ -62,18 +59,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# --- 2. SISTEMA DE AUTENTICAÇÃO E GESTÃO DE USUÁRIO ---
-# A estrutura de autenticação foi mantida, pois é robusta.
 config_file = Path(__file__).parent / "config.yaml"
 if not config_file.exists():
-    # Cria um arquivo de configuração padrão se não existir
+
     default_config = {
         "credentials": {
             "usernames": {
                 "admin": {
                     "email": "admin@example.com",
-                    "name": "Administrador",
-                    # Senha '12345' - Use uma ferramenta para gerar um hash bcrypt seguro para produção
+                    "name": "Administrador",                    
                     "password": "$2b$12$Yg.i2h.fA94ccbCo3x.iU.W3Yv8M2d2yVpr0dFzgehJe.eAIqfC6C",
                     "api_keys": {
                         "gemini_key": "", "gcp_project_id": "", "gcp_location": "us-central1",
@@ -104,7 +98,7 @@ name = st.session_state.get("name")
 authentication_status = st.session_state.get("authentication_status")
 username = st.session_state.get("username")
 
-# --- LÓGICA PRINCIPAL DA APLICAÇÃO ---
+# LÓGICA PRINCIPAL DA APLICAÇÃO 
 
 if not authentication_status:
     st.warning("Por favor, faça login para acessar a plataforma.")
@@ -114,8 +108,7 @@ if not authentication_status:
         st.info('Bem-vindo! Por favor, insira seu usuário e senha.')
 
 elif authentication_status:
-    # --- FUNÇÕES UTILITÁRIAS GLOBAIS E CONSTANTES ---
-    # COMENTÁRIO DE REFATORAÇÃO: Centralização de constantes para fácil manutenção.
+    #  FUNÇÕES UTILITÁRIAS GLOBAIS E CONSTANTES 
     GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
     GEMINI_FLASH_MODEL = "gemini-2.5-flash"
     GEMINI_PRO_MODEL = "gemini-2.5-pro" # Updated to a robust multimodal model for log analysis
@@ -138,8 +131,6 @@ elif authentication_status:
             f.write(file_stream.getbuffer())
         st.success(f"Arquivo '{filename}' salvo com sucesso em 'Meus Arquivos'!")
 
-    # *** CORREÇÃO APLICADA AQUI ***
-    # A função foi movida para o escopo global para ser reutilizável.
     def get_gemini_response(prompt_text, model_name, temperature, api_key):
         """Envia um prompt para a API Gemini e retorna a resposta em texto."""
         if not api_key:
@@ -184,7 +175,6 @@ elif authentication_status:
             st.error(f"Erro ao processar o prompt: {e}")
             return f"Erro ao processar o prompt: {e}"
 
-    # --- BARRA LATERAL DE NAVEGAÇÃO ---
     with st.sidebar:
         st.title(f"Bem-vindo, {name}")
         st.markdown("---")
@@ -199,7 +189,7 @@ elif authentication_status:
         st.markdown("---")
         authenticator.logout("Logout", "main")
 
-    # --- DEFINIÇÃO DAS PÁGINAS ---
+    
     def page_inicial():
         st.title("🚀 Minhas Ferramentas de IA")
         st.markdown("### Bem-vindo à sua central de ferramentas de Inteligência Artificial.")
@@ -386,8 +376,7 @@ elif authentication_status:
                     prompt_for_gemini = (f"Gere um prompt otimizado para {media_type} com base nas informações: "
                                          f"- Requisição: {request_type} - Detalhes: {specific_details} - Requisitos: {content} "
                                          f"- Exemplo: {example or 'N/A'} - Detalhes de Mídia: {media_details or 'N/A'}")
-                    # *** CORREÇÃO APLICADA AQUI ***
-                    # A chamada foi atualizada para a nova função global.
+
                     enhanced_prompt = get_gemini_response(prompt_for_gemini, gemini_model, temperature, GEMINI_API_KEY)
                     if enhanced_prompt:
                         st.subheader("Prompt Otimizado Gerado:")
@@ -637,7 +626,6 @@ if __name__ == "__main__":
                 except Exception as e:
                     st.error(f"Erro ao gerar imagens com Vertex AI: {e}")
 
-    # --- NEW PAGE: ANÁLISE DE LOGS ---
     def page_analise_logs():
         st.header("📊 Análise de Logs e Eventos com IA")
         st.markdown("Cole o conteúdo do seu log ou faça upload de uma imagem (ex: screenshot de erro) para a IA analisar e fornecer insights.")
@@ -953,7 +941,7 @@ if __name__ == "__main__":
                     st.success("Suas configurações foram salvas com sucesso!")
                     st.rerun()
 
-    # --- ROTEADOR DE PÁGINAS ---
+    
     if page == "Página Inicial":
         page_inicial()
     elif page == "Gerador de Exercícios":
