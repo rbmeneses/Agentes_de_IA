@@ -1,0 +1,19 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: ia_plataforma_cookie
+credentials:
+  usernames:
+    admin:
+      api_keys:
+        gcp_location: us-central1
+        gcp_project_id: 
+        gemini_key: 
+        gsearch_cx: 
+        gsearch_key: 
+      email: admin@example.com
+      name: Administrador
+      password: $2b$12$dXLwfOrQQSD3.ufg2EqMsOhp85XJEQ5.flNIkcfs1ub2m1AO0bGte
+preauthorized:
+  emails:
+  - admin@example.com
